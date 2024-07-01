@@ -1,0 +1,6 @@
+Chevrolet Onix,100000
+Hyundai HB20,85000
+Volkswagen Polo,105000
+Fiat Argo,75000
+Honda Civic,185000
+Audi A4,330000
