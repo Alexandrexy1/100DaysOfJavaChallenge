@@ -1,0 +1,7 @@
+Luana Almeida,25,3500.00
+Alexandre Nascimento,20,2300.00
+Gabriel Medeiros,18,1900.00
+Marco Aurelio,33,7400.00
+Matheus Figueiredo,29,5800.00
+Ana Julia,22,3100.00
+Maria Clara,17,1500.00
