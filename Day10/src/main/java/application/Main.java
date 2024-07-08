@@ -1,35 +1,28 @@
 package application;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import database.JpaRepository;
 import entities.Person;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import util.EntityManagerUtil;
 
 public class Main {
 	public static void main(String[] args) {
-        String jdbcUrl = System.getenv("jdbc_url");
-        String jdbcUsername = System.getenv("jdbc_user");
-        String jdbcPassword = System.getenv("jdbc_password");
+        JpaRepository<Person> repository = new JpaRepository<>(Person.class, "people");
+      
+        // repository.create(new Person("Joaquim", 43));
+        // repository.create(new Person("Julia", 29));
+        // repository.create(new Person("Joao", 17));
+
+        Person personFoundById = repository.findById(8);
+        System.out.println(personFoundById); // Person [id=4, name=Julia, age=29]
         
-        Map<String, String> properties = new HashMap<>();
-  
-        properties.put("jakarta.persistence.jdbc.url", jdbcUrl);
-        properties.put("jakarta.persistence.jdbc.user", jdbcUsername);
-        properties.put("jakarta.persistence.jdbc.password", jdbcPassword);
+        personFoundById.setName("Ana");
+        repository.update(personFoundById);
         
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("testdb", properties);
-		EntityManager em = emf.createEntityManager();
-		
-		em.getTransaction().begin();
-        Person person = new Person("Alexandre", 20);
-        em.persist(person);
+        personFoundById = repository.findById(personFoundById.getId());
+        System.out.println(personFoundById); // Person [id=4, name=Ana, age=29]
+
+        repository.delete(personFoundById.getId()); // successfully deleted
         
-        em.getTransaction().commit();
-        
-        em.close();
-        emf.close();
+        EntityManagerUtil.close();
 	}
 }
