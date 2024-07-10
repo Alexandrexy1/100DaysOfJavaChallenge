@@ -12,7 +12,7 @@ import util.EntityManagerUtil;
 
 public class Main {
 	public static void main(String[] args) {		
-        JpaRepository<Customer> repositoryPerson = new JpaRepository<>(Customer.class, "customer");
+        JpaRepository<Customer> repositoryCustomer = new JpaRepository<>(Customer.class, "customer");
         
         Customer customer = new Customer("Alex");
         Order order1 = new Order(LocalDateTime.now());
