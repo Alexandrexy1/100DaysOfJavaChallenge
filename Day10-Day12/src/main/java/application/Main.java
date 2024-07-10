@@ -26,7 +26,7 @@ public class Main {
         order2.setCustomer(customer);
         order3.setCustomer(customer);
         
-        repositoryPerson.create(customer);
+        repositoryCustomer.create(customer);
         
         EntityManagerUtil.close();
         
