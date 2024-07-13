@@ -29,6 +29,7 @@ public class Main {
 		emuAuthor.create(author2);
 		emuBook.create(book1);
 		emuBook.create(book2);
+	
 		
 		EntityManagerUtil.close();
 	}

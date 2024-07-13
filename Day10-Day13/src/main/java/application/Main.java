@@ -1,26 +1,28 @@
 package application;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 
 import database.JpaRepository;
 import entities.Category;
+import entities.Customer;
+import entities.Order;
 import entities.Product;
 import util.EntityManagerUtil;
 
 public class Main {
 	public static void main(String[] args) {		
-<<<<<<< HEAD
+
         JpaRepository<Category> repositoryCategory = new JpaRepository<>(Category.class, "categories");
         JpaRepository<Product> repositoryProduct = new JpaRepository<>(Product.class, "Product");
-=======
+
         JpaRepository<Customer> repositoryCustomer = new JpaRepository<>(Customer.class, "customer");
         
         Customer customer = new Customer("Alex");
         Order order1 = new Order(LocalDateTime.now());
         Order order2 = new Order(LocalDateTime.parse("1986-04-08T12:30:20"));
         Order order3 = new Order(LocalDateTime.parse("2003-05-09T20:10:56"));
->>>>>>> 815fc968a194b591465fb525984e1428a9a4d247
 
         Category category1 = new Category("Books");
         Category category2 = new Category("PC");
@@ -30,7 +32,6 @@ public class Main {
         Product p3 = new Product("Macbook Air m1", 900.0);
         Product p4 = new Product("PC Gamer Ryzen 5", 550.0);
         
-<<<<<<< HEAD
         category1.setProducts(new HashSet<>(Arrays.asList(p1, p2)));
         category2.setProducts(new HashSet<>(Arrays.asList(p3, p4)));
         
@@ -45,9 +46,9 @@ public class Main {
         repositoryProduct.create(p2);
         repositoryProduct.create(p3);
         repositoryProduct.create(p4);
-=======
+
         repositoryCustomer.create(customer);
->>>>>>> 815fc968a194b591465fb525984e1428a9a4d247
+
         
         EntityManagerUtil.close();
         

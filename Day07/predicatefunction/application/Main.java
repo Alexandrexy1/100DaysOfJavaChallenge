@@ -16,8 +16,9 @@ public class Main {
 
         products.removeIf(product -> product.getPrice() < 2000);
         
-        for(Product product: products) {
-            System.out.println(product);
-        } 
+        products.forEach(System.out::println);
+        // name: iPhone 15 pro max, price: $ 7000.0
+        // name: Geladeira electrolux, price: $ 2100.0
     }
 }
+
