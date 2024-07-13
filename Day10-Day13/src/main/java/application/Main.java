@@ -46,6 +46,7 @@ public class Main {
 
         repositoryCustomer.create(customer);
         
+        repositoryCustomer.create(customer);    
         EntityManagerUtil.close();
         
 	}
