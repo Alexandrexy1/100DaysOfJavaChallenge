@@ -52,4 +52,16 @@ public class Product {
     public void setPrice(double price) {
         this.price = price;
     }
+
+    public Long getClientId() {
+        return client != null ? client.getId() : null;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
 }
