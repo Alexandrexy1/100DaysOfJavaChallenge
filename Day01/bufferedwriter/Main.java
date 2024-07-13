@@ -14,6 +14,7 @@ public class Main {
                 bw.write(message);
                 bw.newLine();
             }
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
