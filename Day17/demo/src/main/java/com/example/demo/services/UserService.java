@@ -13,6 +13,7 @@ import com.example.demo.entities.User;
 import com.example.demo.exceptions.InvalidEmailException;
 import com.example.demo.repositories.UserRepository;
 
+
 @Service
 public class UserService implements UserDetailsService {
 	
@@ -21,7 +22,13 @@ public class UserService implements UserDetailsService {
 
 	public void emailValidation(User user) {
 		if(user.getEmail() == null || !user.getEmail().contains("@")) {
-			throw new InvalidEmailException("Email cannot be null", user.getEmail());
+			throw new InvalidEmailException("Email must be valid", user.getEmail());
+		}
+	}
+
+	public void passwordValidation(User user) {
+		if(user.getPassword() == null || user.getPassword().length() < 5) {
+			throw new InvalidEmailException("password must be at least 5 characters long", user.getEmail());
 		}
 	}
 	
@@ -37,6 +44,7 @@ public class UserService implements UserDetailsService {
 	
 	public User insert(User user) {
 		emailValidation(user);
+		passwordValidation(user);
 		return repository.save(user);
 	}
 
