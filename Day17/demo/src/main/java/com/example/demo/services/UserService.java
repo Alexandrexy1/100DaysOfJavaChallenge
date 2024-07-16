@@ -50,7 +50,7 @@ public class UserService {
 	}
 
 	private void updateUser(User entity, User obj) {
-		entity.setName(obj.getName());
 		entity.setEmail(obj.getEmail());
+		entity.setPassword(obj.getPassword());
 	}
 }

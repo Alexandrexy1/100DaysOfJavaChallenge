@@ -13,7 +13,7 @@ import com.example.demo.exceptions.InvalidEmailException;
 public class InvalidEmailExceptionHandler {
     
     @ResponseBody
-    @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidEmailException.class)
     public ErrorEmail handler(InvalidEmailException e) {
         return new ErrorEmail(e.getMessage(), e.getEmail());
