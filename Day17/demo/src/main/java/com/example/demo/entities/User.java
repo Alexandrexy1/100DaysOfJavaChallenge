@@ -10,6 +10,7 @@ import com.example.demo.entities.enums.UserRoleEnum;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,16 +25,22 @@ public class User implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @Column(nullable = false)
     private String email;
     
-    @NotBlank
+    @Column(nullable = false)
     private String password;
 
-    @NotBlank
+    @Column(nullable = false)
     private UserRoleEnum role;
 
     public User() {}
+
+    public User(@NotBlank String email, @NotBlank String password, @NotBlank UserRoleEnum role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 
     public Long getId() {
         return id;
