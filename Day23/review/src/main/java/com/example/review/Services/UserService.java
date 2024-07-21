@@ -22,12 +22,21 @@ public class UserService {
         return repository.findById(id).get();
     }
 
-    public void insert(User user) {
-        if(usernameExists(user.getName())) throw new IllegalArgumentException("Name already exists");
+    public void save(User user) {
+        if(usernameExists(user.getUsername())) throw new IllegalArgumentException("Name already exists");
         repository.save(user);
     }
 
     public Boolean usernameExists(String name) {
         return repository.findByUsername(name).isPresent();
+    }
+
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
+
+    public void update(User entity, User user) {
+        entity.setUsername(user.getUsername());
+        entity.setPassword(user.getPassword());
     }
 }
