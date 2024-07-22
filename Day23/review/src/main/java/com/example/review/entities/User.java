@@ -1,5 +1,12 @@
 package com.example.review.entities;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.example.review.entities.enums.UserRoleEnum;
 
 import jakarta.persistence.Column;
@@ -12,7 +19,7 @@ import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "tb_users")
-public class User {
+public class User implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -59,6 +66,13 @@ public class User {
 
     public void setRole(UserRoleEnum role) {
         this.role = role;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role == UserRoleEnum.ADMIN ? 
+            List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER")) :
+            List.of(new SimpleGrantedAuthority("ROLER_USER"));
     }
 }
 

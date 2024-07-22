@@ -38,8 +38,9 @@ public class AuthenticationController {
     public ResponseEntity<String> login(@RequestBody @Valid AuthDTO login) {
         var auth = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(login.username(), login.password()));
-
+        System.out.println("passou aqui");
         var token = service.generateToken((User) auth.getPrincipal());
+        System.out.println("passou aqui emm");
 
         return ResponseEntity.ok(token);
     }

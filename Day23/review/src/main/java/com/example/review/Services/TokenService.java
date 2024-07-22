@@ -34,7 +34,7 @@ public class TokenService {
 
     public String tokenValidation(String token) {
         try {
-             Algorithm algorithm = Algorithm.HMAC256(token);
+             Algorithm algorithm = Algorithm.HMAC256(secretKey);
              String require = JWT.require(algorithm)
                     .withIssuer("authentication-key")
                     .build()
