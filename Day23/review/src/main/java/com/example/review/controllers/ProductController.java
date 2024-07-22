@@ -41,5 +41,4 @@ public class ProductController {
         service.save(product);
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
-    
 }

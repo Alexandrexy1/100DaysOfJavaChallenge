@@ -3,13 +3,16 @@ package com.example.review.Services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.review.entities.User;
 import com.example.review.repositories.UserRepository;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     
     @Autowired
     private UserRepository repository;
@@ -23,12 +26,7 @@ public class UserService {
     }
 
     public void save(User user) {
-        if(usernameExists(user.getUsername())) throw new IllegalArgumentException("Name already exists");
         repository.save(user);
-    }
-
-    public Boolean usernameExists(String name) {
-        return repository.findByUsername(name).isPresent();
     }
 
     public void deleteById(Long id) {
@@ -39,4 +37,9 @@ public class UserService {
         entity.setUsername(user.getUsername());
         entity.setPassword(user.getPassword());
     }
+
+    @Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return repository.findByUsername(username);
+	}
 }

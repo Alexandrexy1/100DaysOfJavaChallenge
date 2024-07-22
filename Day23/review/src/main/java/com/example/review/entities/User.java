@@ -1,5 +1,7 @@
 package com.example.review.entities;
 
+import com.example.review.entities.enums.UserRoleEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,11 +22,15 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private UserRoleEnum role;
+
     public User() {}
 
-    public User(@NotBlank String username, @NotBlank String password) {
+    public User(@NotBlank String username, @NotBlank String password, @NotBlank UserRoleEnum role) {
         this.username = username;
         this.password = password;
+        this.role = role;
     }
 
     public Long getId() {
@@ -46,4 +52,13 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public UserRoleEnum getRole() {
+        return role;
+    }
+
+    public void setRole(UserRoleEnum role) {
+        this.role = role;
+    }
 }
+
