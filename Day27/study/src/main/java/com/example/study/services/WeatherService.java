@@ -3,44 +3,52 @@ package com.example.study.services;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.Builder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.study.model.WeatherResponse;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import reactor.core.publisher.Mono;
 
 @Service
 public class WeatherService {
     
     private final WebClient.Builder webClientBuilder;
-    private final String apiUrl;
-    private final String apiKey;
+    private final Dotenv dotenv;
+    private String apiUrl;
+    private String apiKey;
 
-    
-
-    public WeatherService(Builder webClientBuilder, String apiUrl, String apiKey) {
+    public WeatherService(Builder webClientBuilder, Dotenv dotenv) {
         this.webClientBuilder = webClientBuilder;
-        this.apiUrl = apiUrl;
-        this.apiKey = apiKey;
+        this.dotenv = dotenv;
     }
-    public WebClient.Builder getWebClientBuilder() {
-        return webClientBuilder;
-    }
-    public String getApiUrl() {
-        return apiUrl;
-    }
-    public String getApiKey() {
-        return apiKey;
-    }
-
+    
     public  Mono<WeatherResponse> getWeather(String city) {
-        return webClientBuilder.build().get().uri(uriBuilder -> uriBuilder
-            .path(apiUrl)
+        apiUrl = dotenv.get("OPENWEATHERMAP_API_URL");
+        apiKey = dotenv.get("OPENWEATHERMAP_API_KEY");
+
+        String uri = UriComponentsBuilder.fromHttpUrl(apiUrl)
             .queryParam("q", city)
             .queryParam("appid", apiKey)
             .queryParam("units", "metric")
-            .build())
-            .retrieve()
-            .bodyToMono(WeatherResponse.class);
+            .queryParam("lang", "pt-br")
+            .toUriString();
+        return webClientBuilder.build().get().uri(uri).retrieve().bodyToMono(WeatherResponse.class);
+    } 
+
+    public WebClient.Builder getWebClientBuilder() {
+        return webClientBuilder;
+    }
+
+    public String getApiUrl() {
+        return apiUrl;
+    }
+
+    public String getApiKey() {
+        return apiKey;
     }
     
+    public Dotenv getDotenv() {
+        return dotenv;
+    }
 }

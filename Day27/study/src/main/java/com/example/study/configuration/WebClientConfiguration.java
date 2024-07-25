@@ -1,4 +1,4 @@
-package com.example.study.client.configuration;
+package com.example.study.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
