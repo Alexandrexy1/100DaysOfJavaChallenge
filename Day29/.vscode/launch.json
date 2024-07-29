@@ -2,6 +2,12 @@
     "configurations": [
         {
             "type": "java",
+            "name": "GatewayServiceApplication",
+            "request": "launch",
+            "mainClass": "com.example.gateway_service.GatewayServiceApplication"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-ConfigserverApplication<configserver>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
@@ -19,7 +25,8 @@
             "mainClass": "com.example.eurekaserver.EurekaserverApplication",
             "projectName": "eurekaserver",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=52145 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=eurekaserver"
         },
         {
             "type": "java",
@@ -29,7 +36,8 @@
             "mainClass": "com.example.product_service.ProductServiceApplication",
             "projectName": "product-service",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=52392 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=product-service"
         },
         {
             "type": "java",
@@ -38,6 +46,17 @@
             "cwd": "${workspaceFolder}",
             "mainClass": "com.example.user_service.UserServiceApplication",
             "projectName": "user-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=52393 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=user-service"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-GatewayServiceApplication<gateway-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.gateway_service.GatewayServiceApplication",
+            "projectName": "gateway-service",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
