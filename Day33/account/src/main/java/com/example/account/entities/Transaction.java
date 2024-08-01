@@ -39,7 +39,7 @@ public class Transaction {
         this.description = description;
         this.amount = amount;
         this.user = user;
-
+        this.status = TransactionStatus.PENDING;
     }
 
     public Long getId() {

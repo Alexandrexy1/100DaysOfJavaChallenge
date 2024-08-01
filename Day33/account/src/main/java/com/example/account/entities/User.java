@@ -2,9 +2,15 @@ package com.example.account.entities;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.example.account.entities.enums.TransactionType;
+import com.example.account.entities.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -17,7 +23,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_user")
-public class User {
+public class User implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
@@ -26,6 +32,8 @@ public class User {
 
     @JsonIgnore
     private String password;
+
+    public UserRole role;
     
     private BigDecimal balance = BigDecimal.ZERO;
 
@@ -34,10 +42,11 @@ public class User {
 
     public User() {}
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, UserRole role) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
     
     public void deposit(BigDecimal amount) {
@@ -87,5 +96,22 @@ public class User {
 
     public List<Transaction> geTransactions() {
         return transactions;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role == UserRole.USER ? 
+            List.of(new SimpleGrantedAuthority("ROLE_USER"), new SimpleGrantedAuthority("ROLE_GUEST")) :
+            List.of(new SimpleGrantedAuthority("ROLE_GUEST"));
+    }
+
+    @Override
+    public String getUsername() {
+        return name;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
