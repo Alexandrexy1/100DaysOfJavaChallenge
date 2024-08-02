@@ -32,6 +32,7 @@ public class TransactionController {
     @GetMapping
     public ResponseEntity<List<Transaction>> findAll() {
         List<Transaction> transactions = transactionService.findAll();
+        // aqui
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 

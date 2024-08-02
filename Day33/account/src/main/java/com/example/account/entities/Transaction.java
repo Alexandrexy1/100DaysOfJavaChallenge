@@ -31,7 +31,7 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "id_user")
-    @JsonIgnoreProperties("balance")
+    @JsonIgnoreProperties({"balance", "accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
     private User user;
     
     public Transaction() {}

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.account.entities.Transaction;
+import com.example.account.entities.enums.TransactionStatus;
 import com.example.account.repositories.TransactionRepository;
 
 @Service
@@ -22,6 +23,7 @@ public class TransactionService {
     }
 
     public void save(Transaction transaction) {
+        transaction.setStatus(TransactionStatus.COMPLETED);
         transactionRepository.save(transaction);
     }
 
