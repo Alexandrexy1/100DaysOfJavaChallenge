@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.example.account.entities.enums.TransactionStatus;
 import com.example.account.entities.enums.TransactionType;
 import com.example.account.entities.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,8 +36,9 @@ public class User implements UserDetails {
 
     public UserRole role;
     
-    private BigDecimal balance = BigDecimal.ZERO;
+    private BigDecimal balance;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> transactions = new ArrayList<>();
 
@@ -47,19 +49,26 @@ public class User implements UserDetails {
         this.email = email;
         this.password = password;
         this.role = role;
+        this.balance = BigDecimal.ZERO;
     }
     
-    public void deposit(BigDecimal amount) {
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException("Deposit amount must be positive.");
-        balance = balance.add(amount);
-        transactions.add(new Transaction(amount, TransactionType.DEPOSIT, "deposit successful", this));
+    public void deposit(Transaction transaction) {
+        if (transaction.getAmount().compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException("Deposit amount must be positive.");
+        balance = balance.add(transaction.getAmount());
+        transaction.setStatus(TransactionStatus.COMPLETED);
+        transactions.add(new Transaction(transaction.getAmount(), TransactionType.WITHDRAWAL, "withdrawal successful", this));
+    }
+    
+    public void withdraw(Transaction transaction) {
+        if (transaction.getAmount().compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException("Withdraw amount must be positive.");
+        if (transaction.getAmount().compareTo(balance) > 0) throw new IllegalArgumentException("Insufficient funds.");
+        balance = balance.subtract(transaction.getAmount());
+        transaction.setStatus(TransactionStatus.COMPLETED);
+        transactions.add(new Transaction(transaction.getAmount(), TransactionType.WITHDRAWAL, "withdrawal successful", this)); 
     }
 
-    public void withdraw(BigDecimal amount) {
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException("Withdraw amount must be positive.");
-        if (amount.compareTo(balance) > 0) throw new IllegalArgumentException("Insufficient funds.");
-        balance = balance.subtract(amount);
-        transactions.add(new Transaction(amount, TransactionType.WITHDRAWAL, "withdrawal successful", this)); 
+    public void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
     }
 
     public Long getId() {
@@ -94,10 +103,15 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public List<Transaction> geTransactions() {
+    public List<Transaction> getTransactions() {
         return transactions;
     }
+    
+    public UserRole getRole() {
+        return role;
+    }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role == UserRole.USER ? 
@@ -105,11 +119,13 @@ public class User implements UserDetails {
             List.of(new SimpleGrantedAuthority("ROLE_GUEST"));
     }
 
+    @JsonIgnore
     @Override
     public String getUsername() {
         return name;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;

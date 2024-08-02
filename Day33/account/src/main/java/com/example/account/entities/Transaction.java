@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import com.example.account.entities.enums.TransactionStatus;
 import com.example.account.entities.enums.TransactionType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +31,7 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "id_user")
+    @JsonIgnoreProperties("balance")
     private User user;
     
     public Transaction() {}

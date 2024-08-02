@@ -1,8 +1,7 @@
 package com.example.account.entities.enums;
 
 public enum UserRole {
-    USER("user"),
-    GUEST("guest");
+    USER("user");
 
     private String role;
 

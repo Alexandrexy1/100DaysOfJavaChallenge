@@ -29,6 +29,7 @@ public class SecurityConfig {
                 req -> req.requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                     .requestMatchers(HttpMethod.POST, "/transactions").hasRole("USER")
+                    .requestMatchers(HttpMethod.GET, "/users").hasRole("USER")
                     .anyRequest().authenticated()
             ).addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class).build();
     }

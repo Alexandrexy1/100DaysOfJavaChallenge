@@ -30,6 +30,7 @@ public class AuthController {
     @Autowired
     AuthenticationManager authenticationManager;
 
+
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody @Valid RegisterDTO register) {
         if(userRepository.findByName(register.name()) != null) return ResponseEntity.badRequest().build();

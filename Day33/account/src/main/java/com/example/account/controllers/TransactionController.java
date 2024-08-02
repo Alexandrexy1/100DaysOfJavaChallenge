@@ -3,8 +3,11 @@ package com.example.account.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,12 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.account.Services.TransactionService;
 import com.example.account.entities.Transaction;
+import com.example.account.entities.User;
+import com.example.account.repositories.UserRepository;
 
 @RequestMapping("/transactions")
 @RestController
 public class TransactionController {
     @Autowired
-    private TransactionService transactionService;
+    TransactionService transactionService;
+
+    @Autowired 
+    UserRepository userRepository;
 
     @GetMapping
     public ResponseEntity<List<Transaction>> findAll() {
@@ -33,9 +41,28 @@ public class TransactionController {
         return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Transaction> save(@RequestBody Transaction transaction) {
+    @PostMapping("/deposit")
+    public ResponseEntity<String> deposit(@RequestBody Transaction tra) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        User user = (User) userRepository.findByName(name);
+        Transaction transaction = new Transaction(tra.getAmount(), tra.getTransactionType(), tra.getDescription(), user);
+
         transactionService.save(transaction);
-        return new ResponseEntity<>(transaction, HttpStatus.CREATED);
+        user.deposit(transaction);
+
+        return new ResponseEntity<>("Deposit successful.", HttpStatus.OK);
+    }
+    
+    @PostMapping("/withdraw")
+    public ResponseEntity<String> withdraw(@RequestBody Transaction tra) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        User user = (User) userRepository.findByName(name);
+        Transaction transaction = new Transaction(tra.getAmount(), tra.getTransactionType(), tra.getDescription(), user);
+        user.withdraw(transaction);
+
+        transactionService.save(transaction);
+        return new ResponseEntity<>("Withdrawal successful.", HttpStatus.OK);
     }
 }
