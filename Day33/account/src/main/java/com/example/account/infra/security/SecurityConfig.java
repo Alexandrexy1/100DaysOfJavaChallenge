@@ -27,11 +27,12 @@ public class SecurityConfig {
             .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(
                 req -> req.requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/transactions").hasRole("USER")
-                    .requestMatchers(HttpMethod.GET, "/users").hasRole("USER")
-                    .anyRequest().authenticated()
-            ).addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class).build();
+                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/transactions").hasRole("USER")
+                .requestMatchers(HttpMethod.GET, "/users").hasRole("USER")
+                .requestMatchers("/console/**").permitAll().anyRequest().authenticated()
+            ).headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
+            .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
     @Bean

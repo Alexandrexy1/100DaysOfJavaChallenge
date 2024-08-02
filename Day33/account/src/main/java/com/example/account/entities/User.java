@@ -10,7 +10,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.account.entities.enums.TransactionStatus;
-import com.example.account.entities.enums.TransactionType;
 import com.example.account.entities.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -56,15 +55,14 @@ public class User implements UserDetails {
         if (transaction.getAmount().compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException("Deposit amount must be positive.");
         balance = balance.add(transaction.getAmount());
         transaction.setStatus(TransactionStatus.COMPLETED);
-        transactions.add(new Transaction(transaction.getAmount(), TransactionType.WITHDRAWAL, "withdrawal successful", this));
+        transactions.add(transaction);
     }
     
     public void withdraw(Transaction transaction) {
         if (transaction.getAmount().compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException("Withdraw amount must be positive.");
         if (transaction.getAmount().compareTo(balance) > 0) throw new IllegalArgumentException("Insufficient funds.");
         balance = balance.subtract(transaction.getAmount());
-        transaction.setStatus(TransactionStatus.COMPLETED);
-        transactions.add(new Transaction(transaction.getAmount(), TransactionType.WITHDRAWAL, "withdrawal successful", this)); 
+        transactions.add(transaction); 
     }
 
     public void addTransaction(Transaction transaction) {

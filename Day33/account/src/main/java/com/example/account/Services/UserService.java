@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.example.account.entities.Transaction;
 import com.example.account.entities.User;
 import com.example.account.repositories.UserRepository;
 
@@ -16,6 +17,12 @@ public class UserService implements UserDetailsService {
     
     @Autowired
     private UserRepository userRepository;
+
+
+    public void deposit(User user, Transaction transaction) {
+        user.deposit(transaction);
+        userRepository.save(user);
+    }
 
     public void save(User user) {
         userRepository.save(user);

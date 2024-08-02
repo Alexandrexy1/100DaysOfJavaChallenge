@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.account.Services.TransactionService;
+import com.example.account.Services.UserService;
 import com.example.account.entities.Transaction;
 import com.example.account.entities.User;
 import com.example.account.repositories.UserRepository;
@@ -28,6 +29,9 @@ public class TransactionController {
 
     @Autowired 
     UserRepository userRepository;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping
     public ResponseEntity<List<Transaction>> findAll() {
@@ -45,13 +49,9 @@ public class TransactionController {
     @PostMapping("/deposit")
     public ResponseEntity<String> deposit(@RequestBody Transaction tra) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
-        User user = (User) userRepository.findByName(name);
+        User user = (User) userRepository.findByName(authentication.getName());
         Transaction transaction = new Transaction(tra.getAmount(), tra.getTransactionType(), tra.getDescription(), user);
-
-        transactionService.save(transaction);
-        user.deposit(transaction);
-
+        userService.deposit(user, transaction);
         return new ResponseEntity<>("Deposit successful.", HttpStatus.OK);
     }
     
