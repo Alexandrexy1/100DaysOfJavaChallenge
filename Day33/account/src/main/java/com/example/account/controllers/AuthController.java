@@ -1,6 +1,7 @@
 package com.example.account.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,7 +39,7 @@ public class AuthController {
         String encryptedPassword = new BCryptPasswordEncoder().encode(register.password());
         User user = new User(register.name(), register.email(), encryptedPassword, register.role());
         userRepository.save(user);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

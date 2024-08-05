@@ -62,6 +62,7 @@ public class User implements UserDetails {
         if (transaction.getAmount().compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException("Withdraw amount must be positive.");
         if (transaction.getAmount().compareTo(balance) > 0) throw new IllegalArgumentException("Insufficient funds.");
         balance = balance.subtract(transaction.getAmount());
+        transaction.setStatus(TransactionStatus.COMPLETED);
         transactions.add(transaction); 
     }
 

@@ -61,9 +61,7 @@ public class TransactionController {
         String name = authentication.getName();
         User user = (User) userRepository.findByName(name);
         Transaction transaction = new Transaction(tra.getAmount(), tra.getTransactionType(), tra.getDescription(), user);
-        user.withdraw(transaction);
-
-        transactionService.save(transaction);
+        userService.withdraw(user, transaction);
         return new ResponseEntity<>("Withdrawal successful.", HttpStatus.OK);
     }
 }

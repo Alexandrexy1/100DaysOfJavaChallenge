@@ -24,6 +24,11 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public void withdraw(User user, Transaction transaction) {
+        user.withdraw(transaction);
+        userRepository.save(user);
+    }
+
     public void save(User user) {
         userRepository.save(user);
     }
