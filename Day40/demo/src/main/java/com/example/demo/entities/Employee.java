@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -19,16 +20,19 @@ public class Employee {
     private String jobTitle;
     
     @ManyToOne
+    @JoinColumn(name = "department_id")
     private Department department;
+    
     private Double salary;
     private LocalDateTime hiringDate;
 
-    public Employee() {}
+    public Employee() {
+        this.hiringDate = LocalDateTime.now();
+    }
 
-    public Employee(String name, String jobTitle, Department department, Double salary) {
+    public Employee(String name, String jobTitle, Long depId, Double salary) {
         this.name = name;
         this.jobTitle = jobTitle;
-        this.department = department;
         this.salary = salary;
         this.hiringDate = LocalDateTime.now();
     }

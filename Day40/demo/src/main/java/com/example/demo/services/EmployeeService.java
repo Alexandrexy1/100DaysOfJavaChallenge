@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.DTO.EmployeeDTO;
 import com.example.demo.entities.Employee;
 import com.example.demo.repositories.EmployeeRepository;
 
@@ -14,7 +15,15 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public void save(Employee employee) {
+    @Autowired
+    private DepartmentService departmentService;
+
+    public void save(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        employee.setName(employeeDTO.getName());
+        employee.setDepartment(departmentService.findById(employeeDTO.getDepartmentId()));
+        employee.setJobTitle(employeeDTO.getJobTitle());
+        employee.setSalary(employeeDTO.getSalary());
         employeeRepository.save(employee);
     }
 

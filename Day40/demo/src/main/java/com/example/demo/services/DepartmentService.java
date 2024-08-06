@@ -13,8 +13,8 @@ public class DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
  
-    public void save(Department entity) {
-        departmentRepository.save(entity);
+    public Department save(Department entity) {
+        return departmentRepository.save(entity);
     }
 
     public List<Department> findAll() {
