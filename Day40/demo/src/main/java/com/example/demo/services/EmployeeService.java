@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.DTO.EmployeeDTO;
+import com.example.demo.entities.Department;
 import com.example.demo.entities.Employee;
 import com.example.demo.repositories.EmployeeRepository;
 
@@ -35,6 +36,10 @@ public class EmployeeService {
         return employeeRepository.findById(id).get();
     }
 
+    public Employee findByName(String name) {
+        return employeeRepository.findByName(name);
+    }
+
     public void deleteById(Long id) {
         employeeRepository.deleteById(id);
     }
@@ -43,6 +48,8 @@ public class EmployeeService {
         entity.setName(employee.getName());
         entity.setSalary(employee.getSalary());
         entity.setJobTitle(employee.getJobTitle());
-        entity.setDepartment(employee.getDepartment());
+        System.out.println("departmentId: " + employee.getDepartment().getId());
+        Department department = departmentService.findById(employee.getDepartment().getId());
+        entity.setDepartment(department);
     }
 }
