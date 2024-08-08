@@ -31,3 +31,16 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Logs
+/logs/
+/*.log
+*.log
+
+application.log
+
+# Spring Boot
+spring.log
+
+# Application log
+application.log

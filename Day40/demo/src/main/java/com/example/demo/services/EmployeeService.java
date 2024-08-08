@@ -2,6 +2,8 @@ package com.example.demo.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ import com.example.demo.repositories.EmployeeRepository;
 
 @Service
 public class EmployeeService {
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
+
     
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -25,6 +29,8 @@ public class EmployeeService {
         employee.setDepartment(departmentService.findById(employeeDTO.getDepartmentId()));
         employee.setJobTitle(employeeDTO.getJobTitle());
         employee.setSalary(employeeDTO.getSalary());
+
+        logger.info("Saving employee: {}", employee);
         employeeRepository.save(employee);
     }
 
@@ -40,16 +46,19 @@ public class EmployeeService {
         return employeeRepository.findByName(name);
     }
 
-    public void deleteById(Long id) {
-        employeeRepository.deleteById(id);
-    }
-
     public void update(Employee entity, Employee employee) {
         entity.setName(employee.getName());
         entity.setSalary(employee.getSalary());
         entity.setJobTitle(employee.getJobTitle());
-        System.out.println("departmentId: " + employee.getDepartment().getId());
         Department department = departmentService.findById(employee.getDepartment().getId());
         entity.setDepartment(department);
+        logger.info("updated Employee: {}", entity);
     }
+    
+    public void deleteById(Long id) {
+        Employee employee = employeeRepository.findById(id).get();
+        logger.info("deleted employee: {}", employee);
+        employeeRepository.deleteById(id);
+    }
+
 }
