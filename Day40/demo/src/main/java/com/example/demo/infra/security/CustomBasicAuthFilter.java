@@ -28,26 +28,29 @@ public class CustomBasicAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (isBasicAuth(request)) {
-            String codeBase64 = request.getHeader("Authorization").replace("Basic ", "");
-            String[] decodeBase64 = decode(codeBase64).split(":");
+        String path = request.getServletPath();
 
+        if("/users".equals(path) && request.getMethod().equals("POST")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        var basicAuth = isBasicAuth(request);
+
+        if (basicAuth != null) {
+            String codeBase64 = basicAuth;
+            String[] decodeBase64 = decode(codeBase64).split(":");
             String username = decodeBase64[0];
             String password = decodeBase64[1];
 
             User user = userRepository.findByUsername(username);
-            System.out.println("username: " + user.getUsername());
-            System.out.println("username: " + user.getUsername());
-            System.out.println("username: " + user.getUsername());
-            System.out.println("username: " + user.getUsername());
-            System.out.println("OIIIII");
-
             boolean isValid = validPassword(password, user.getPassword());
 
             if (!isValid) response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
             setAuth(user);
         }
+        filterChain.doFilter(request, response);
     }
     
     private void setAuth(User user) {
@@ -56,16 +59,19 @@ public class CustomBasicAuthFilter extends OncePerRequestFilter {
     }
 
     private String decode(String base) {
-        return Base64.getDecoder().decode(base).toString();
+        return new String(Base64.getDecoder().decode(base));
     }
 
     private boolean validPassword(String password, String userPassword) {
         return passwordEncoder().matches(password, userPassword);
     }
 
-    private boolean isBasicAuth(HttpServletRequest request) {
-        String header = request.getHeader("Authorization");
-        return header != null && header.startsWith("Basic ");
+    private String isBasicAuth(HttpServletRequest request) {
+        var header = request.getHeader("Authorization");
+        if (header != null) {
+            return header.replace("Basic ", "");
+        }
+        return null;  
     }
     
     PasswordEncoder passwordEncoder() {

@@ -14,6 +14,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public void save(User user) {
+        System.out.println("cheguei no userService save");
         userRepository.save(user);
     }
 

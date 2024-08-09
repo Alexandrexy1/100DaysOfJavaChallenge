@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 
 import org.springframework.security.web.SecurityFilterChain;
-
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -26,13 +26,14 @@ public class SecurityConfiguration {
         return httpSecurity.csrf(csrf -> csrf.disable()) 
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(req -> req
+            .requestMatchers(HttpMethod.POST, "/users").permitAll()
             .requestMatchers(HttpMethod.GET, "/employees").authenticated()
             .requestMatchers(HttpMethod.POST, "/employees").authenticated()
             .requestMatchers(HttpMethod.GET, "/departments").authenticated()
             .requestMatchers(HttpMethod.POST, "/departments").authenticated()
             .requestMatchers(HttpMethod.GET, "/users").authenticated()
-            .requestMatchers(HttpMethod.POST, "/users").permitAll()
             .anyRequest().authenticated())
+            .addFilterBefore(customBasicAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 

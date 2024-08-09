@@ -11,7 +11,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -20,6 +19,7 @@ import com.example.demo.services.EmployeeService;
 import com.example.demo.DTO.EmployeeDTO;
 import com.example.demo.entities.Department;
 import com.example.demo.entities.Employee;
+
 import com.example.demo.entities.User;
 
 
@@ -47,21 +47,17 @@ class DemoApplicationTests {
 
 		User user = createUser("Alex", "12345");
 
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setBasicAuth(user.getUsername(), user.getPassword());
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBasicAuth(user.getUsername(), user.getPassword());
 
-	
-		Department department1 = createDepartment("Tech");
-		Department department2 = createDepartment("Industrial");
-
-		System.out.println("department name:" + department1.getDepartmentName());
-		System.out.println("department name:" + department2.getDepartmentName());
+		Department department1 = createDepartment("Tech", headers);
+		Department department2 = createDepartment("Industrial", headers);
 		
-		// EmployeeDTO employeeSaved = new EmployeeDTO("Maria", "FullStack Developer", department1.getId(), 3200.);
-		// createEmployee(employeeSaved);
+		EmployeeDTO employeeSaved = new EmployeeDTO("Maria", "FullStack Developer", department1.getId(), 3200.);
+		createEmployee(employeeSaved, headers);
 		
-		// EmployeeDTO employeeUpdate = new EmployeeDTO("Maria", "FullStack Developer", department2.getId(), 4800.);
-		// updateEmployee(employeeUpdate);
+		EmployeeDTO employeeUpdate = new EmployeeDTO("Maria", "FullStack Developer", department2.getId(), 4800.);
+		updateEmployee(employeeUpdate, headers);
 	}
 
 	private User createUser(String name, String password) {
@@ -71,30 +67,25 @@ class DemoApplicationTests {
 		return userResponse.getBody();
 	}
 
-	private Department createDepartment(String name) {
+	private Department createDepartment(String name, HttpHeaders headers) {
 		Department department = new Department(name);
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Department> requestEntity = new HttpEntity<>(department, headers);
 
-		ResponseEntity<Department> departmentResponse = testRestTemplate.exchange(baseUrl + "/departments", HttpMethod.POST, requestEntity, Department.class);
-		assertEquals(HttpStatus.CREATED, departmentResponse);
+		ResponseEntity<Department> departmentResponse = testRestTemplate.postForEntity(baseUrl + "/departments", requestEntity, Department.class);
+		assertEquals(HttpStatus.CREATED, departmentResponse.getStatusCode());
 		return departmentResponse.getBody();
 	}
 
-	private void createEmployee(EmployeeDTO employee) {
-		ResponseEntity<String> employeeResponse = testRestTemplate.postForEntity(baseUrl + "/employees", employee, String.class);
-		assertEquals(HttpStatus.CREATED, employeeResponse);
+	private void createEmployee(EmployeeDTO employee, HttpHeaders headers) {
+		HttpEntity<EmployeeDTO> requestEntity = new HttpEntity<>(employee, headers);
+		ResponseEntity<String> employeeResponse = testRestTemplate.postForEntity(baseUrl + "/employees", requestEntity, String.class);
+		assertEquals(HttpStatus.CREATED, employeeResponse.getStatusCode());
 	}
 
-	private void updateEmployee(EmployeeDTO employee) {
+	private void updateEmployee(EmployeeDTO employee, HttpHeaders headers) {
 		Employee employeeUpdate = employeeService.findByName(employee.getName());
 		employeeUpdate.setDepartment(departmentService.findById(employee.getDepartmentId()));
 		
-		HttpHeaders headers = new HttpHeaders();
-			
-		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Employee> requestUpdate = new HttpEntity<>(employeeUpdate, headers);
 		ResponseEntity<Employee> employeeUpdResponse = testRestTemplate.exchange(baseUrl +"/employees/" + employeeUpdate.getId(), HttpMethod.PUT, requestUpdate, Employee.class);
 		assertEquals(HttpStatus.OK, employeeUpdResponse.getStatusCode());
