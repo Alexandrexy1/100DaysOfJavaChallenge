@@ -32,7 +32,6 @@ public class UserService {
     public void update(User entity, User user) {
         entity.setUsername(user.getUsername());
         entity.setPassword(user.getPassword());
-        entity.setRole(user.getRole());
 
     }
 }
