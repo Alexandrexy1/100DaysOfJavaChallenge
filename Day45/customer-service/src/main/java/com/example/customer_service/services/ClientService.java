@@ -1,0 +1,39 @@
+package com.example.customer_service.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.customer_service.entities.Client;
+import com.example.customer_service.repositories.ClientRepository;
+
+import jakarta.persistence.Entity;
+
+@Entity
+public class ClientService {
+    @Autowired
+    private ClientRepository clientRepository;
+
+    public void save(Client client) {
+        clientRepository.save(client);
+    }
+
+    public List<Client> findAll() {
+        return clientRepository.findAll();
+    }
+
+    public Client findById(Long id) {
+        return clientRepository.findById(id).get();
+    }
+
+    public void update(Client entity, Client client) {
+        entity.setAdress(client.getAdress());
+        entity.setEmail(client.getEmail());
+        entity.setName(client.getName());
+        entity.setNumber(client.getNumber());
+    }
+
+    public void deleteById(Long id) {
+        clientRepository.deleteById(id);
+    }
+}
