@@ -2,6 +2,8 @@ package com.example.order_service.entities;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,10 +17,13 @@ public class OrderItem {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer quantity;
+    private String name;
+    private BigDecimal quantity;
     private BigDecimal unitPrice;
+
     @ManyToOne
     @JoinColumn(name = "orderItem_id")
+    @JsonIgnore
     private Order order;
 
     @OneToOne
@@ -27,20 +32,29 @@ public class OrderItem {
 
     public OrderItem() {}
 
-    public OrderItem(Integer quantity, Double unitPrice) {
+    public OrderItem(String name, BigDecimal quantity, Double unitPrice) {
+        this.name = name;
         this.quantity = quantity;
         this.unitPrice = BigDecimal.valueOf(unitPrice);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getId() {
         return id;
     }
 
-    public Integer getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 

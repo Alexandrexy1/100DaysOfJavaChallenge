@@ -1,15 +1,18 @@
 package com.example.customer_service.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_adress")
-public class Adress {
+public class Address {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String street;
@@ -18,9 +21,11 @@ public class Adress {
     private String city;
 
     @OneToOne
+    @JoinColumn(name = "client_id")
+    @JsonIgnore
     private Client client;
 
-    public Adress(String street, Integer number, String state, String city, Client client) {
+    public Address(String street, Integer number, String state, String city, Client client) {
         this.street = street;
         this.number = number;
         this.state = state;

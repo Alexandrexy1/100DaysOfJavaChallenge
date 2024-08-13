@@ -20,8 +20,10 @@ public class OrderService {
 
     public void saveOrderItem(OrderItem orderItem, Long id) {
         Order order = orderRepository.findById(id).get();
-        System.out.println("Order id " + order.getId());
+        orderItem.setOrder(order);
         order.setItems(orderItem);
+        order.addTotal(orderItem.getUnitPrice(), orderItem.getQuantity());
+        save(order);
     }
 
     public List<Order> findAll() {
@@ -40,7 +42,6 @@ public class OrderService {
     public void update(Order entity, Order order) {
         entity.setOrderDate(order.getOrderDate());
         entity.setStatus(order.getStatus());
-        entity.setTotal(order.getTotal());
     }
 
     public void deleteById(Long id) {

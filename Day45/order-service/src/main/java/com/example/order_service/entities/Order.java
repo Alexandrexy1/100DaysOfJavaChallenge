@@ -25,7 +25,7 @@ public class Order {
     
     private LocalDateTime orderDate = LocalDateTime.now();
 
-    private OrderStatus status;
+    private OrderStatus status = OrderStatus.PENDING;
     private BigDecimal total = BigDecimal.ZERO;
     
     public Order() {}
@@ -62,7 +62,7 @@ public class Order {
         return total;
     }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
+    public void addTotal(BigDecimal unitPrice, BigDecimal quantity) {
+        total = total.add(unitPrice.multiply(quantity));
     } 
 }

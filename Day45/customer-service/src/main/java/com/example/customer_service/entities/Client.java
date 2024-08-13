@@ -1,7 +1,7 @@
 package com.example.customer_service.entities;
 
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails.Address;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,14 +18,15 @@ public class Client {
     private String email;
     private String number;
     
-    @OneToOne
-    private Address adress;
+    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Address address;
 
-    public Client(String name, String email, String number, Address adress) {
+    public Client(String name, String email, String number, Address address) {
         this.name = name;
         this.email = email;
         this.number = number;
-        this.adress = adress;
+        this.address = address;
+        this.address.setClient(this);
     }
 
     public Long getId() {
@@ -56,11 +57,11 @@ public class Client {
         this.number = number;
     }
 
-    public Address getAdress() {
-        return adress;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setAdress(Address adress) {
-        this.adress = adress;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }
