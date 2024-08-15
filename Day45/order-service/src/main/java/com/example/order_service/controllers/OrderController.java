@@ -43,6 +43,7 @@ public class OrderController {
     @PostMapping("/{id}/items")
     public ResponseEntity<OrderItem> saveOrderItem(@RequestBody OrderItem orderItem, @PathVariable Long id) {
         orderService.saveOrderItem(orderItem, id);
+        orderService.createOrder(id);
         return new ResponseEntity<>(orderItem, HttpStatus.CREATED);
     }
 
@@ -52,3 +53,4 @@ public class OrderController {
         return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
 }
+

@@ -33,6 +33,7 @@ public class ClientService {
         entity.setNumber(client.getNumber());
     }
 
+
     public void deleteById(Long id) {
         clientRepository.deleteById(id);
     }

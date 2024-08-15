@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.order_service.DTO.OrderItemDTO;
 import com.example.order_service.entities.OrderItem;
 import com.example.order_service.repositories.OrderItemRepository;
 
@@ -29,6 +30,12 @@ public class OrderItemService {
         entity.setOrder(orderItem.getOrder());
         entity.setQuantity(orderItem.getQuantity());
         entity.setUnitPrice(orderItem.getUnitPrice());
+    }
+
+    public OrderItemDTO convertToOrderItemDTO(OrderItem orderItem) {
+        OrderItemDTO orderItemDTO = new OrderItemDTO(
+            orderItem.getId(), orderItem.getName(), orderItem.getQuantity(), orderItem.getUnitPrice());
+        return orderItemDTO;
     }
 
     public void deleteById(Long id) {
