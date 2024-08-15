@@ -24,6 +24,7 @@ public class OrderService {
         order.setItems(orderItem);
         order.addTotal(orderItem.getUnitPrice(), orderItem.getQuantity());
         save(order);
+        
     }
 
     public List<Order> findAll() {

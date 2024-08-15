@@ -19,15 +19,15 @@ import jakarta.persistence.Table;
 public class Order {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> items;
+    private Long customerId;
     
     private LocalDateTime orderDate = LocalDateTime.now();
-
     private OrderStatus status = OrderStatus.PENDING;
     private BigDecimal total = BigDecimal.ZERO;
     
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> items;
+
     public Order() {}
 
     public Long getId() {
@@ -64,5 +64,10 @@ public class Order {
 
     public void addTotal(BigDecimal unitPrice, BigDecimal quantity) {
         total = total.add(unitPrice.multiply(quantity));
+    }
+
+    public Long getCustomerId() {
+        return customerId;
     } 
 }
+
