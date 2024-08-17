@@ -36,7 +36,6 @@ public class OrderService {
         List<OrderItemDTO> orderItemDTOs = convertToOrderItemDTOList(order.getItems());
         
         return new OrderDTO(order.getId(), 
-        order.getCustomerId(), 
         order.getOrderDate(), 
         order.getStatus(), 
         order.getTotal(), 

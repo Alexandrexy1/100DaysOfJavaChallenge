@@ -1,5 +1,7 @@
 package com.example.customer_service.DTO.enums;
 
-public class OrderStatus {
-    
+public enum OrderStatus {
+    PENDING, 
+    COMPLETED,
+    CANCELLED
 }

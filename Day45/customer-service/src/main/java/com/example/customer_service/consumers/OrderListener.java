@@ -14,6 +14,6 @@ public class OrderListener {
 
     @RabbitListener(queues = "${spring.rabbitmq.queue}")
     public void receiveOrder(OrderDTO orderDTO) {
-        System.out.println("Order received: " + orderDTO.getId());
+        System.out.println("Order received: " + orderDTO.getTotal());
     }
 }
