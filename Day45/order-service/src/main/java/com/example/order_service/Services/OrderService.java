@@ -24,11 +24,10 @@ public class OrderService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-
     public Order createOrder(Long id) {
         Order order = findById(id);    
         OrderDTO orderDTO = convertToOrderDTO(order);
-        rabbitTemplate.convertAndSend(orderDTO);
+        rabbitTemplate.convertAndSend("orderExchange", "orderRoutingKey", orderDTO);
         return order; 
     }
 
