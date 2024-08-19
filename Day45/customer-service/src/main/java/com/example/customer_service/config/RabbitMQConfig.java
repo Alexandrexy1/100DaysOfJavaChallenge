@@ -12,7 +12,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 @Configuration
 public class RabbitMQConfig {
-    @Value("${spring.rabbitmq.queue}")
+    @Value("${spring.rabbitmq.receive.order.queue}")
     private String queue;
 
     @Bean

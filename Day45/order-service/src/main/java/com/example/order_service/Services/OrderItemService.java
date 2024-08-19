@@ -38,6 +38,12 @@ public class OrderItemService {
         return orderItemDTO;
     }
 
+    public OrderItem convertToOrderItem(OrderItemDTO orderItemDTO) {
+        OrderItem orderItem = new OrderItem(
+            orderItemDTO.getName(), orderItemDTO.getQuantity(), orderItemDTO.getUnitPrice());
+        return orderItem;
+    }
+
     public void deleteById(Long id) {
         orderItemRepository.deleteById(id);
     }

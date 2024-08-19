@@ -11,6 +11,7 @@ public class OrderDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private Long id;
+    private Long customerId;
     private LocalDateTime orderDate;
     private OrderStatus status;
     private BigDecimal total;
@@ -19,8 +20,9 @@ public class OrderDTO implements Serializable {
     // Constructors
     public OrderDTO() {}
 
-    public OrderDTO(Long id, LocalDateTime orderDate, OrderStatus status, BigDecimal total, List<OrderItemDTO> items) {
+    public OrderDTO(Long id, Long customerId, LocalDateTime orderDate, OrderStatus status, BigDecimal total, List<OrderItemDTO> items) {
         this.id = id;
+        this.customerId = customerId;
         this.orderDate = orderDate;
         this.status = status;
         this.total = total;
@@ -34,6 +36,10 @@ public class OrderDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
     }
 
     public LocalDateTime getOrderDate() {

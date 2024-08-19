@@ -20,7 +20,7 @@ public class ClientService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    @Value("${spring.rabbitmq.queue}")
+    @Value("${spring.rabbitmq.receive.order.queue}")
     private String queue;
 
     public void sendOrder(Long customerId) {

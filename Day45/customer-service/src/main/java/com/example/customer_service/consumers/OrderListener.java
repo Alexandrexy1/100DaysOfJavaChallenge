@@ -9,7 +9,7 @@ import com.example.customer_service.DTO.OrderDTO;
 @Service
 public class OrderListener {
 
-    @RabbitListener(queues = "${spring.rabbitmq.queue}")
+    @RabbitListener(queues = "${spring.rabbitmq.receive.order.queue}")
     public void receiveOrder(OrderDTO orderDTO) {
         System.out.println("Order received: " + orderDTO.getTotal());
     }

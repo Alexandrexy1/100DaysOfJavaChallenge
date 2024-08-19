@@ -34,11 +34,32 @@ public class OrderService {
     public OrderDTO convertToOrderDTO(Order order) {
         List<OrderItemDTO> orderItemDTOs = convertToOrderItemDTOList(order.getItems());
         
-        return new OrderDTO(order.getId(), 
+        return new OrderDTO(order.getId(),
+        order.getCustomerId(), 
         order.getOrderDate(), 
         order.getStatus(), 
         order.getTotal(), 
         orderItemDTOs);
+    }
+
+    public Order convertToOrder(OrderDTO orderDTO) {
+        List<OrderItem> orderItems = null;
+        try {
+            if (orderDTO.getItems() != null) orderItems = convertToOrderItemsList(orderDTO.getItems()); 
+            Order order = new Order();
+            order.setOrderDate(orderDTO.getOrderDate());
+            order.setStatus(orderDTO.getStatus());
+            order.setItems(orderItems);
+            return order;
+        } catch (NullPointerException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    private List<OrderItem> convertToOrderItemsList(List<OrderItemDTO> orderItemsDTO) {
+        List<OrderItem> orderItems = new ArrayList<>();
+        orderItemsDTO.forEach(orderItemDTO -> orderItems.add(orderItemService.convertToOrderItem(orderItemDTO)));
+        return orderItems;
     }
 
     private List<OrderItemDTO> convertToOrderItemDTOList(List<OrderItem> orderItems) {
@@ -54,7 +75,7 @@ public class OrderService {
     public void saveOrderItem(OrderItem orderItem, Long id) {
         Order order = orderRepository.findById(id).get();
         orderItem.setOrder(order);
-        order.setItems(orderItem);
+        order.addItem(orderItem);
         order.addTotal(orderItem.getUnitPrice(), orderItem.getQuantity());
         save(order);
         

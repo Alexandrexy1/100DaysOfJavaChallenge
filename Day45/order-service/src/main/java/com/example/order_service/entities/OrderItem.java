@@ -33,10 +33,10 @@ public class OrderItem {
 
     public OrderItem() {}
 
-    public OrderItem(String name, BigDecimal quantity, Double unitPrice) {
+    public OrderItem(String name, BigDecimal quantity, BigDecimal unitPrice) {
         this.name = name;
         this.quantity = quantity;
-        this.unitPrice = BigDecimal.valueOf(unitPrice);
+        this.unitPrice = unitPrice;
     }
 
     public String getName() {

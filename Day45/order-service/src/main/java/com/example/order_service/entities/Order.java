@@ -46,7 +46,11 @@ public class Order {
         return items;
     }
 
-    public void setItems(OrderItem item) {
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
+    }
+
+    public void addItem(OrderItem item) {
         this.items.add(item);
     }
 
