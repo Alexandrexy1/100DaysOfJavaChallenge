@@ -8,23 +8,23 @@ import com.example.customer_service.DTO.enums.OrderStatus;
 
 public class OrderDTO {
     private Long id;
+    private Long customerId;
     private LocalDateTime orderDate;
     private OrderStatus status;
     private BigDecimal total;
     private List<OrderItemDTO> items;
 
-    // Constructors
     public OrderDTO() {}
 
-    public OrderDTO(Long id, LocalDateTime orderDate, OrderStatus status, BigDecimal total, List<OrderItemDTO> items) {
+    public OrderDTO(Long id, Long customerId, LocalDateTime orderDate, OrderStatus status, BigDecimal total, List<OrderItemDTO> items) {
         this.id = id;
+        this.customerId = customerId;
         this.orderDate = orderDate;
         this.status = status;
         this.total = total;
         this.items = items;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -64,4 +64,18 @@ public class OrderDTO {
     public void setItems(List<OrderItemDTO> items) {
         this.items = items;
     }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    
 }
