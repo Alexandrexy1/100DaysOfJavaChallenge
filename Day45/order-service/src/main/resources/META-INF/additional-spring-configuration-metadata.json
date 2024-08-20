@@ -8,5 +8,40 @@
     "name": "spring.rabbitmq.receive.order.queue",
     "type": "java.lang.String",
     "description": "A description for 'spring.rabbitmq.receive.order.queue'"
+  },
+  {
+    "name": "spring.rabbitmq.exchange",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.rabbitmq.exchange'"
+  },
+  {
+    "name": "spring.rabbitmq.routingkey",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.rabbitmq.routingkey'"
+  },
+  {
+    "name": "spring.rabbitmq.receive.exchange",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.rabbitmq.receive.exchange'"
+  },
+  {
+    "name": "spring.rabbitmq.receive.routingkey",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.rabbitmq.receive.routingkey'"
+  },
+  {
+    "name": "spring.rabbitmq.send.order.queue",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.rabbitmq.send.order.queue'"
+  },
+  {
+    "name": "spring.rabbitmq.send.exchange",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.rabbitmq.send.exchange'"
+  },
+  {
+    "name": "spring.rabbitmq.send.routingkey",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.rabbitmq.send.routingkey'"
   }
 ]}

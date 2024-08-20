@@ -47,8 +47,6 @@ public class OrderService {
         try {
             if (orderDTO.getItems() != null) orderItems = convertToOrderItemsList(orderDTO.getItems()); 
             Order order = new Order();
-            order.setOrderDate(orderDTO.getOrderDate());
-            order.setStatus(orderDTO.getStatus());
             order.setItems(orderItems);
             return order;
         } catch (NullPointerException e) {
