@@ -1,9 +1,12 @@
 package com.example.order_service.config;
 
+import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,13 +45,23 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    Binding sendOrderBinding(@Qualifier("sendOrderQueue") Queue orderQueue, DirectExchange orderExchange) {
-        return BindingBuilder.bind(orderQueue).to(orderExchange).with(routingKey);
+    SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
+        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory);
+        factory.setMessageConverter(jsonMessageConverter());
+        factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+        factory.setPrefetchCount(1);  
+        return factory;
+    }
+
+    @Bean
+    Binding sendOrderBinding(@Qualifier("sendOrderQueue") Queue sendOrderQueue, DirectExchange orderExchange) {
+        return BindingBuilder.bind(sendOrderQueue).to(orderExchange).with(routingKey);
     }
     
     @Bean
-    Binding receiveOrderBinding(@Qualifier("receiveOrderQueue") Queue orderQueue, DirectExchange orderExchange) {
-        return BindingBuilder.bind(orderQueue).to(orderExchange).with(routingKey);
+    Binding receiveOrderBinding(@Qualifier("receiveOrderQueue") Queue receiveOrderQueue, DirectExchange orderExchange) {
+        return BindingBuilder.bind(receiveOrderQueue).to(orderExchange).with(routingKey);
     }
 
     @Bean
