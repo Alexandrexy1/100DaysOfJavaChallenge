@@ -4,17 +4,24 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.product_service.entities.Product;
 import com.example.product_service.repositories.ProductRepository;
+import com.example.product_service.producers.ProductProducer;
 
 @Service
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private ProductProducer productProducer;
+
+    @Transactional
     public void save(Product product) {
-        productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+        productProducer.publishMessageProduct(savedProduct);
     }
 
     public List<Product> findAll() {

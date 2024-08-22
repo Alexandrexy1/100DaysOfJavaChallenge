@@ -2,12 +2,10 @@ package com.example.customer_service.services;
 
 import java.util.List;
 
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.example.customer_service.DTO.OrderDTO;
 import com.example.customer_service.entities.Client;
 import com.example.customer_service.repositories.ClientRepository;
 
@@ -17,18 +15,7 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
-
-    @Value("${spring.rabbitmq.receive.order.queue}")
-    private String queue;
-
-    public void sendOrder(Long customerId) {
-        OrderDTO orderDTO = new OrderDTO();
-        orderDTO.setCustomerId(customerId);
-        rabbitTemplate.convertAndSend(queue, orderDTO);
-    }
-
+    @Transactional
     public void save(Client client) {
         clientRepository.save(client);
     }

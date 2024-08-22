@@ -53,7 +53,6 @@ public class ClientController {
     @PostMapping
     public ResponseEntity<Client> save(@RequestBody Client client) {
         clientService.save(client);
-        clientService.sendOrder(client.getId());
         return new ResponseEntity<>(client, HttpStatus.CREATED);
     }
 }

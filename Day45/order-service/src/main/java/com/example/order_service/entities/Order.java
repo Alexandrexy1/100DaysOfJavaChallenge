@@ -20,15 +20,22 @@ public class Order {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long customerId;
-    
-    private LocalDateTime orderDate = LocalDateTime.now();
-    private OrderStatus status = OrderStatus.PENDING;
-    private BigDecimal total = BigDecimal.ZERO;
+
+    private LocalDateTime orderDate;
+    private OrderStatus status;
+    private BigDecimal total;
     
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items;
 
     public Order() {}
+
+    public Order(Long customerId) {
+        this.customerId = customerId;
+        this.orderDate = LocalDateTime.now();
+        this.status = OrderStatus.PENDING;
+        this.total = BigDecimal.ZERO;
+    }
 
     public Long getId() {
         return id;

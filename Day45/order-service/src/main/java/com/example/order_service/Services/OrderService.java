@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.order_service.DTO.OrderDTO;
 import com.example.order_service.DTO.OrderItemDTO;
@@ -24,7 +24,7 @@ public class OrderService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public Order createOrder(Long id) {
+    public Order createOrderDTO(Long id) {
         Order order = findById(id);    
         OrderDTO orderDTO = convertToOrderDTO(order);
         rabbitTemplate.convertAndSend("orderExchange", "orderRoutingKey", orderDTO);
@@ -46,15 +46,20 @@ public class OrderService {
         List<OrderItem> orderItems = null;
         try {
             if (orderDTO.getItems() != null) orderItems = convertToOrderItemsList(orderDTO.getItems()); 
-            Order order = new Order();
-            order.setItems(orderItems);
-            return order;
+            Order order = new Order(orderDTO.getCustomerId());
+            if (orderItems != null) order.setItems(orderItems);
+            Order savedOrder = save(order);
+    
+            return savedOrder;
         } catch (NullPointerException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
+
+
     private List<OrderItem> convertToOrderItemsList(List<OrderItemDTO> orderItemsDTO) {
+
         List<OrderItem> orderItems = new ArrayList<>();
         orderItemsDTO.forEach(orderItemDTO -> orderItems.add(orderItemService.convertToOrderItem(orderItemDTO)));
         return orderItems;
@@ -66,8 +71,9 @@ public class OrderService {
         return orderItemDTOs;
     }
 
-    public void save(Order order) {
-        orderRepository.save(order);
+    @Transactional
+    public Order save(Order order) {
+        return orderRepository.save(order);
     }
 
     public void saveOrderItem(OrderItem orderItem, Long id) {
